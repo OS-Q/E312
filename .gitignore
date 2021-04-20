@@ -1,0 +1,9 @@
+*.pyc
+*__pyc*/
+*.pio
+*.vscode
+*.rst
+LICENSE*
+**/*README*
+*.png
+*.jpg
