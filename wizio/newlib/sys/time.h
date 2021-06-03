@@ -14,41 +14,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////  
+#pragma once
 
-#include <interface.h>
-
-//#pragma GCC diagnostic push
-//#pragma GCC diagnostic ignored "-Wsized-deallocation"
-
-void *operator new(size_t size)
-{
-  return std::malloc(size);
-}
-
-void *operator new[](size_t size)
-{
-  return std::malloc(size);
-}
-
-void operator delete(void *ptr, __unused std::size_t n) noexcept
-{
-  std::free(ptr);
-}
-
-void operator delete[](void *ptr, __unused std::size_t n) noexcept
-{
-  std::free(ptr);
-}
-
-void operator delete(void *ptr) noexcept
-{
-  std::free(ptr);
-}
-
-void operator delete[](void *ptr) noexcept
-{
-  std::free(ptr);
-}
-
-//#pragma GCC diagnostic pop
+#include <_ansi.h>
+#include <sys/types.h>
+#define __rtems__
+#include_next <sys/time.h>
+#undef __rtems__

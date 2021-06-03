@@ -15,40 +15,7 @@
 // limitations under the License.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
+#pragma once
 
-#include <interface.h>
-
-//#pragma GCC diagnostic push
-//#pragma GCC diagnostic ignored "-Wsized-deallocation"
-
-void *operator new(size_t size)
-{
-  return std::malloc(size);
-}
-
-void *operator new[](size_t size)
-{
-  return std::malloc(size);
-}
-
-void operator delete(void *ptr, __unused std::size_t n) noexcept
-{
-  std::free(ptr);
-}
-
-void operator delete[](void *ptr, __unused std::size_t n) noexcept
-{
-  std::free(ptr);
-}
-
-void operator delete(void *ptr) noexcept
-{
-  std::free(ptr);
-}
-
-void operator delete[](void *ptr) noexcept
-{
-  std::free(ptr);
-}
-
-//#pragma GCC diagnostic pop
+#include <stddef.h>
+#include <stdint.h>

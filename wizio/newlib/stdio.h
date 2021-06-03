@@ -16,39 +16,24 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <interface.h>
-
-//#pragma GCC diagnostic push
-//#pragma GCC diagnostic ignored "-Wsized-deallocation"
-
-void *operator new(size_t size)
+#ifndef _PLATFORM_STDIO_H
+#define _PLATFORM_STDIO_H
+#ifdef __cplusplus
+extern "C"
 {
-  return std::malloc(size);
-}
+#endif
+#include_next <stdio.h>
 
-void *operator new[](size_t size)
-{
-  return std::malloc(size);
-}
+#include <stdbool.h>
 
-void operator delete(void *ptr, __unused std::size_t n) noexcept
-{
-  std::free(ptr);
-}
+/* if stdio is not used - weak */
+void stdio_init_all(void) __attribute__((weak)); 
 
-void operator delete[](void *ptr, __unused std::size_t n) noexcept
-{
-  std::free(ptr);
-}
+/* wait terminal */
+bool stdio_usb_connected(void) __attribute__((weak));
+#define stdio_connected() stdio_usb_connected()
 
-void operator delete(void *ptr) noexcept
-{
-  std::free(ptr);
+#ifdef __cplusplus
 }
-
-void operator delete[](void *ptr) noexcept
-{
-  std::free(ptr);
-}
-
-//#pragma GCC diagnostic pop
+#endif
+#endif /* _PLATFORM_STDIO_H */

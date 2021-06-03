@@ -16,39 +16,36 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#include <interface.h>
+#include "wizio.h"
 
-//#pragma GCC diagnostic push
-//#pragma GCC diagnostic ignored "-Wsized-deallocation"
+#ifdef USE_DEBUG
+#include "dbg.h"
+bool DBG_IS_OPEN = false;
+char DBG_BUFFER[DBG_BUFFER_SIZE];
+#endif
 
-void *operator new(size_t size)
+unsigned int strhash(const void *p)
 {
-  return std::malloc(size);
+    unsigned int h = 0, v, i;
+    char * src = (char*)p;
+    if (src)
+    {
+        for (h = 0, i = 0; i < strlen(src); i++)
+        {
+            h = 5527 * h + 7 * src[i];
+            v = h & 0x0000ffff;
+            h ^= v * v;
+        }
+    }
+    return h;
 }
 
-void *operator new[](size_t size)
+int SysTick_Config(uint32_t ticks)
 {
-  return std::malloc(size);
+    if ((ticks - 1) > 0xFFFFFFUL)
+        return -1;               /* Reload value impossible */
+    systick_hw->rvr = ticks - 1; /* Set reload */
+    systick_hw->cvr = 0;         /* Counter Value */
+    systick_hw->csr = 5;         /* Enable  */
+    return 0;
 }
-
-void operator delete(void *ptr, __unused std::size_t n) noexcept
-{
-  std::free(ptr);
-}
-
-void operator delete[](void *ptr, __unused std::size_t n) noexcept
-{
-  std::free(ptr);
-}
-
-void operator delete(void *ptr) noexcept
-{
-  std::free(ptr);
-}
-
-void operator delete[](void *ptr) noexcept
-{
-  std::free(ptr);
-}
-
-//#pragma GCC diagnostic pop

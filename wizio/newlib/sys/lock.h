@@ -15,40 +15,39 @@
 // limitations under the License.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
+#pragma once
+#include_next <sys/lock.h>
 
-#include <interface.h>
+#ifdef _RETARGETABLE_LOCKING
 
-//#pragma GCC diagnostic push
-//#pragma GCC diagnostic ignored "-Wsized-deallocation"
+#ifndef USE_FREERTOS
 
-void *operator new(size_t size)
+#include "pico/mutex.h"
+struct __lock
 {
-  return std::malloc(size);
-}
+    mutex_t m;
+};
 
-void *operator new[](size_t size)
+#else
+#include <FreeRTOS.h>
+#include <semphr.h>
+struct __lock
 {
-  return std::malloc(size);
-}
+    StaticSemaphore_t ignore;
+};
+#endif // USE_FREERTOS
 
-void operator delete(void *ptr, __unused std::size_t n) noexcept
-{
-  std::free(ptr);
-}
+typedef _LOCK_T _lock_t;
 
-void operator delete[](void *ptr, __unused std::size_t n) noexcept
-{
-  std::free(ptr);
-}
+void _lock_init(_lock_t *plock);
+void _lock_init_recursive(_lock_t *plock);
+void _lock_close(_lock_t *plock);
+void _lock_close_recursive(_lock_t *plock);
+void _lock_acquire(_lock_t *plock);
+void _lock_acquire_recursive(_lock_t *plock);
+int _lock_try_acquire(_lock_t *plock);
+int _lock_try_acquire_recursive(_lock_t *plock);
+void _lock_release(_lock_t *plock);
+void _lock_release_recursive(_lock_t *plock);
 
-void operator delete(void *ptr) noexcept
-{
-  std::free(ptr);
-}
-
-void operator delete[](void *ptr) noexcept
-{
-  std::free(ptr);
-}
-
-//#pragma GCC diagnostic pop
+#endif // _RETARGETABLE_LOCKING
