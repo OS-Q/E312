@@ -1,7 +1,7 @@
 {
-    "name": "E22A",
+    "name": "E312",
     "description": "Framework for Raspberry Pi Pico",
-    "url": "https://github.com/OS-Q/E22A",
+    "url": "https://github.com/OS-Q/E312",
     "system": "*",
     "version": "1.0.8"
 }
